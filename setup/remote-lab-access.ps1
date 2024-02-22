@@ -23,7 +23,17 @@ $cred = get-credential username
 $cred | export-clixml credfile.xml
 
 # retrieve credential file
-$cred=import-xmlcli \hidden\credfile.xml
+$cred=Import-Clixml \hidden\credfile.xml
 
 # use credential file
 enter-pssession -computername server -credential $cred
+
+# store password NAME THE FILE SOMETHING ELSE!!!!!!!!!!!!!!
+read-host -assecurestring | convertfrom-securestring | out-file username-password-encrypted.txt
+
+# set username and retrieve passsword
+$username = "domain\username"
+$password = cat username-password-encrypted.txt | convertto-securestring
+
+# create credential
+$cred = new-object -typename System.Management.Automation.PSCredential -argumentlist $username, $password
